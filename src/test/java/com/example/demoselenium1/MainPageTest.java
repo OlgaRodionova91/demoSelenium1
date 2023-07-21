@@ -59,19 +59,21 @@ public class MainPageTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
         wait.until(ExpectedConditions.and(
-                ExpectedConditions.attributeContains(By.cssSelector(":not(.b.adurl)>cite"), "cite", "selenium"),
-                ExpectedConditions.elementToBeClickable(By.cssSelector(":not(.b.adurl)>cite"))
+                ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".b_attribution > cite"), "selenium"),
+                ExpectedConditions.elementToBeClickable(By.cssSelector(".b_attribution > cite"))
         ));
-        List<WebElement> results = driver.findElements(By.cssSelector(":not(.b.adurl)>cite"));
+        List<WebElement> results = driver.findElements(By.cssSelector(".b_attribution > cite"));
         //results.get(0).click();
+
+        for (WebElement el : results) {
+            System.out.println(el.getText());
+        }
 
         clickElement(results, 0);
         String link = driver.getCurrentUrl();
         assertEquals("https://www.selenium.dev/", link, "Адреса не совпадают");
 
-        for (WebElement el : results) {
-            System.out.println(el.getText());
-        }
+
     }
 
     public void clickElement(List<WebElement> results, int num) {
