@@ -1,5 +1,7 @@
-package com.example.demoselenium1;
+package com.example.demoselenium1.tests;
 
+import com.example.demoselenium1.pages.MainPage;
+import com.example.demoselenium1.pages.ResultsPage;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-public class MainPageTest {
+public class BingSearchTest {
     private WebDriver driver;
 
     @BeforeEach
@@ -37,48 +39,34 @@ public class MainPageTest {
     }
 
     @Test
-    public void search() {
+    public void searchFieldTest() {
         String input = "Selenium";
-        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
-        searchField.sendKeys(input);
-        searchField.submit();
+        MainPage mp = new MainPage(driver);
+        mp.sendText(input);
 
-        WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
-        assertEquals(input, searchPageField.getAttribute("value"), "Значение в поле ввода поменялось");
+        ResultsPage rp = new ResultsPage(driver);
+        assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
 
 
 
     @Test
-    public void searchSelenium() {
+    public void searchResultsTest() {
         String input = "Selenium";
-
-        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
-        searchField.sendKeys(input);
-        searchField.submit();
+        MainPage mp = new MainPage(driver);
+        mp.sendText(input);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
         wait.until(ExpectedConditions.and(
                 ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".b_attribution > cite"), "selenium"),
                 ExpectedConditions.elementToBeClickable(By.cssSelector(".b_attribution > cite"))
         ));
-        List<WebElement> results = driver.findElements(By.cssSelector(".b_attribution > cite"));
-        //results.get(0).click();
 
-        for (WebElement el : results) {
-            System.out.println(el.getText());
-        }
+        ResultsPage rp = new ResultsPage(driver);
+        rp.clickElement(0);
 
-        clickElement(results, 0);
-        String link = driver.getCurrentUrl();
-        assertEquals("https://www.selenium.dev/", link, "Адреса не совпадают");
+        assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Адреса не совпадают");
 
-
-    }
-
-    public void clickElement(List<WebElement> results, int num) {
-        results.get(num).click();
-        System.out.println("Клик по номеру" + num);
     }
 
 }
