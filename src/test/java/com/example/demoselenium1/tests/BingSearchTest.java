@@ -19,6 +19,8 @@ import java.util.List;
 
 public class BingSearchTest {
     private WebDriver driver;
+    private MainPage mp;
+    private ResultsPage rp;
 
     @BeforeEach
     public void setUp() {
@@ -31,6 +33,9 @@ public class BingSearchTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
 
+        mp = new MainPage(driver);
+        rp = new ResultsPage(driver);
+
     }
 
     @AfterEach
@@ -41,10 +46,8 @@ public class BingSearchTest {
     @Test
     public void searchFieldTest() {
         String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
 
-        ResultsPage rp = new ResultsPage(driver);
         assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
 
@@ -53,7 +56,6 @@ public class BingSearchTest {
     @Test
     public void searchResultsTest() {
         String input = "Selenium";
-        MainPage mp = new MainPage(driver);
         mp.sendText(input);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
@@ -62,7 +64,7 @@ public class BingSearchTest {
                 ExpectedConditions.elementToBeClickable(By.cssSelector(".b_attribution > cite"))
         ));
 
-        ResultsPage rp = new ResultsPage(driver);
+
         rp.clickElement(0);
 
         assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Адреса не совпадают");

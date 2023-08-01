@@ -7,7 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 // https://www.bing.com/
 
 public class MainPage {
-    @FindBy (css =".sbox > #sb_form")
+    @FindBy (css =".sb_form_q")
     private WebElement searchField;
 
     public void sendText(String text){
@@ -17,7 +17,7 @@ public class MainPage {
     }
 
     public MainPage(WebDriver driver){
-        PageFactory.initElements(driver, "this");
+        PageFactory.initElements(driver, this);
 
 
     }

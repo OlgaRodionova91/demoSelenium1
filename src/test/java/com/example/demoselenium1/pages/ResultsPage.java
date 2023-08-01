@@ -9,6 +9,9 @@ import java.util.List;
 
 
 public class ResultsPage {
+
+    WebDriver driver;
+
     @FindBy(css = "#sb_form_q")
     private WebElement searchField;
 
@@ -27,6 +30,6 @@ public class ResultsPage {
     }
     public ResultsPage(WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver, "this");
+        PageFactory.initElements(driver, this);
     }
 }
